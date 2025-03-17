@@ -19,7 +19,7 @@ def extract_pdf_text(pdf_path):
         return ""
 
 if __name__ == "__main__":
-    pdf_file = "/Users/paullemaire/Downloads/cv2.pdf" 
+    pdf_file = "cvs/nathan.pdf" 
     extracted_text = extract_pdf_text(pdf_file)
     print(extracted_text)
 
