@@ -2,9 +2,7 @@ import fitz  # PyMuPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import numpy as np
-import langid
-from transformers import pipeline
-from transformers import AutoTokenizer, AutoModelForTokenClassification
+
 
 
 def extract_words_with_positions(pdf_path):
@@ -142,59 +140,21 @@ def order_clusters(clusters):
 
 def unite_paragraphs(paragraphs):
     text=''
-    for p in paragraphes:
+    for p in paragraphs:
         for mot in p:
             text+=mot + ' '
     return text            
 
 
-words = extract_words_with_positions("cv2.pdf")
-clusters = group_words(words)
-
-paragraphes = order_clusters(clusters)
-
-
-create_pdf_from_words_with_rects(words, "output_with_rects.pdf")
-create_pdf_clusters(clusters, "output_with_clusters.pdf")
-cv_text = unite_paragraphs(paragraphes)
-print(paragraphes)
-
-#detect language and coose nlp model
-lang, _ = langid.classify(cv_text)
-
-if lang == "fr":
-    print("cv francais")
-    nlp_ner = pipeline("ner", model="camembert-base", tokenizer="camembert-base")
-    tag_name = ['PER']
-elif lang == "en":
-    print("cv anglais")
-    nlp_ner = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
-    tag_name = ['B-PER','I-PER']
-else:
-    print("Langue non prise en charge.")
-    nlp_ner = None
+def extract_txt(path):
+    words = extract_words_with_positions(path)
+    clusters = group_words(words)
+    paragraphes = order_clusters(clusters)
 
 
-if nlp_ner:
-    names= []
-    for p in paragraphes:
-        txt = ' '.join(p)
-        entities = nlp_ner(txt)
-        memory_word = ''
-        for e in entities:
-            if e['entity'] in tag_name:
-                if memory_word:
-                    if e['word'].startswith('##'):
-                        memory_word+=e['word'][2:]
-                    else:
-                        names.append(memory_word)
-                        memory_word =e['word']
-                else:
-                    memory_word =e['word']
-
-        if memory_word:
-            names.append(memory_word)
-
-print(names)
+    create_pdf_from_words_with_rects(words, "output_with_rects.pdf")
+    create_pdf_clusters(clusters, "output_with_clusters.pdf")
+   
+    return paragraphes
 
     
