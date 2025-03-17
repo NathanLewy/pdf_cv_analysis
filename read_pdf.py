@@ -152,8 +152,8 @@ def extract_txt(path):
     paragraphes = order_clusters(clusters)
 
 
-    create_pdf_from_words_with_rects(words, "output_with_rects.pdf")
-    create_pdf_clusters(clusters, "output_with_clusters.pdf")
+    create_pdf_from_words_with_rects(words, "./output/output_with_rects.pdf")
+    create_pdf_clusters(clusters, "./output/output_with_clusters.pdf")
    
     return paragraphes
 

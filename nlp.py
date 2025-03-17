@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification
 
 
 #detect language and coose nlp model
-file = "cv2.pdf"
+file = "./CV_database/cv2.pdf"
 paragraphs = extract_txt(file)
 cv_text = unite_paragraphs(paragraphs)
 lang, _ = langid.classify(cv_text)
