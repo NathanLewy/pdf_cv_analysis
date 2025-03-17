@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification
 
 
 #detect language and coose nlp model
-file = "./CV_database/cv2.pdf"
+file = "./CV_database/cv_ps.pdf"
 paragraphs = extract_txt(file)
 cv_text = unite_paragraphs(paragraphs)
 lang, _ = langid.classify(cv_text)
@@ -16,10 +16,6 @@ if lang == "fr":
     print("cv francais")
     nlp_ner = pipeline("ner", model="camembert-base", tokenizer="camembert-base")
     tag_name = ['PER']
-elif lang == "en":
-    print("cv anglais")
-    nlp_ner = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
-    tag_name = ['B-PER','I-PER']
 else:
     print("Langue non prise en charge.")
     nlp_ner = None
